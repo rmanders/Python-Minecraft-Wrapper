@@ -7,13 +7,16 @@ import time
 import io
 import sys
 from subprocess import Popen, PIPE
+from daemonize import Daemonize
 
+# Default argument values
 DEF_JVM_PATH = ''
 DEF_MC_JAR = 'minecraft.jar'
 DEF_SERVER_PATH = './'
 DEF_JVM_ARGS = '-Xms1024M -Xmx1024M'
 DEF_MC_ARGS = 'nogui'
 DEF_SERVER_IO = "./pmw.txt"
+DEF_DAEMONIZE = False
 
 
 class ServerIoType:
@@ -48,7 +51,7 @@ class MinecraftServerWrapper (object):
             self.mc_args
         ]
 
-    def start(self):
+    def run(self):
         """starts the minecraft server"""
 
         cmd = self.build_server_commands()
@@ -74,8 +77,17 @@ class MinecraftServerWrapper (object):
 
                 time.sleep(0.5)
 
+    def test(self):
+        while True:
+            time.sleep(1.0)
+
+    def as_daemon(self):
+        pid = "/tmp/minecraft-wrapper.pid"
+        daemon = Daemonize(app="minecraft_wrapper", pid=pid, action=self.test)
+        daemon.start()
 
 if __name__ == '__main__':
 
     server = MinecraftServerWrapper()
-    server.start()
+    #server.run()
+    server.as_daemon()

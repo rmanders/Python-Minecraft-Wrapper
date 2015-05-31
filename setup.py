@@ -21,11 +21,11 @@ setup (
 
     packages = find_packages(exclude=['venv']),
 
-    install_requires = ['daemonize'],
+    install_requires = ['python-daemon'],
 
     entry_points = {
         'console_scripts' : [
-            #'quickrun=quickrun:main'
+            'pmw = pmw.scripts.pmw:main'
         ]
     }
 
